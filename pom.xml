@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.guohe</groupId>
@@ -24,11 +24,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>8.0.20</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,6 +36,12 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>8.0.20</scope>
         </dependency>
 
         <dependency>
@@ -65,7 +67,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.54</version>
+            <version>1.2.62</version>
         </dependency>
 
     </dependencies>
@@ -78,7 +80,6 @@
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.4.0</version>
-                <!--下面这里是对应数据库的驱动,这里我们用的是H2-->
                 <dependencies>
                     <dependency>
                         <groupId>mysql</groupId>
