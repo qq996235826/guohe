@@ -27,7 +27,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <scope>8.0.20</scope>
         </dependency>
 
         <dependency>
@@ -48,11 +48,6 @@
             <version>2.1.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>8.0.20</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
