@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guohe.app.mapper.ScoreExtMapper">
+    <resultMap id="BaseResultMap" type="com.guohe.app.model.Score">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="startSemester" jdbcType="VARCHAR" property="startsemester" />
+        <result column="courseName" jdbcType="VARCHAR" property="coursename" />
+        <result column="score" jdbcType="VARCHAR" property="score" />
+        <result column="credit" jdbcType="VARCHAR" property="credit" />
+        <result column="examinationMethod" jdbcType="VARCHAR" property="examinationmethod" />
+        <result column="courseAttribute" jdbcType="VARCHAR" property="courseattribute" />
+        <result column="alternativeCourseNumber" jdbcType="VARCHAR" property="alternativecoursenumber" />
+        <result column="alternativeCourseName" jdbcType="VARCHAR" property="alternativecoursename" />
+        <result column="markOfScore" jdbcType="VARCHAR" property="markofscore" />
+    </resultMap>
+    <select id="getAllScoreCanCompare" resultMap="BaseResultMap">
+
+        select courseName ,score,examinationMethod from score
+        where uid = #{uid} and startSemester=#{semester} and score %101!=0
+    </select>
+</mapper>

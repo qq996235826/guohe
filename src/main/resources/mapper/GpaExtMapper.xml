@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guohe.app.mapper.GpaExtMapper">
+    <resultMap id="BaseResultMap" type="com.guohe.app.model.Gpa">
+        <id column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="semester1" jdbcType="VARCHAR" property="semester1" />
+        <result column="semester2" jdbcType="VARCHAR" property="semester2" />
+        <result column="semester3" jdbcType="VARCHAR" property="semester3" />
+        <result column="semester4" jdbcType="VARCHAR" property="semester4" />
+        <result column="semester5" jdbcType="VARCHAR" property="semester5" />
+        <result column="semester6" jdbcType="VARCHAR" property="semester6" />
+        <result column="semester7" jdbcType="VARCHAR" property="semester7" />
+        <result column="semester8" jdbcType="VARCHAR" property="semester8" />
+        <result column="average" jdbcType="VARCHAR" property="average" />
+    </resultMap>
+    <select id="gpaRankAtSemester" resultType="java.lang.Long">
+
+        select count(*) from gpa
+        where ${schoolTerm} >#{gpa} and uid like #{uid}
+    </select>
+
+
+</mapper>
