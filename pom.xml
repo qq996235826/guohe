@@ -41,7 +41,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>5.7.27</scope>
+            <version>8.0.20</version>
         </dependency>
 
         <dependency>
@@ -74,7 +74,6 @@
 
     <build>
         <plugins>
-
             <!--mybatis-generator-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
@@ -84,7 +83,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.7.27</version>
+                        <version>8.0.20</version>
                     </dependency>
                 </dependencies>
             </plugin>

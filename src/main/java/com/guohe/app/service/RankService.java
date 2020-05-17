@@ -7,7 +7,6 @@ import com.guohe.app.mapper.GpaExtMapper;
 import com.guohe.app.mapper.GpaMapper;
 import com.guohe.app.mapper.ScoreExtMapper;
 import com.guohe.app.mapper.ScoreMapper;
-import com.guohe.app.model.GpaExample;
 import com.guohe.app.model.Score;
 import com.guohe.app.model.ScoreExample;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @version/版本: V1.0
@@ -50,8 +48,8 @@ public class RankService
         try
         {
             ScoreExample example = new ScoreExample();
-            example.createCriteria().andCoursenameEqualTo(courseName).andStartsemesterEqualTo(startSemester).andScoreGreaterThan(score).andExaminationmethodEqualTo(examMethod);
-            Long rank=scoreMapper.countByExample(example);
+            example.createCriteria().andCourseNameEqualTo(courseName).andStartSemesterEqualTo(startSemester).andScoreGreaterThan(score).andExaminationMethodEqualTo(examMethod);
+            long rank=scoreMapper.countByExample(example);
             return rank+1;
         }
         catch (Exception e)
@@ -108,8 +106,8 @@ public class RankService
             //遍历scoreList以获得各科分数和名字以及考试类型,再用getRank方法查询排名
             for (Score score:scoreList)
             {
-                String rank=getRank(score.getCoursename(),startSemester,score.getScore(),score.getExaminationmethod()).toString();
-                rankMap.put(score.getCoursename(),rank);
+                String rank=getRank(score.getCourseName(),startSemester,score.getScore(),score.getExaminationMethod()).toString();
+                rankMap.put(score.getCourseName(),rank);
             }
             return rankMap;
         }

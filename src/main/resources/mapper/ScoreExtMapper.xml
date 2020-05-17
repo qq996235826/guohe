@@ -4,15 +4,15 @@
     <resultMap id="BaseResultMap" type="com.guohe.app.model.Score">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="uid" jdbcType="VARCHAR" property="uid" />
-        <result column="startSemester" jdbcType="VARCHAR" property="startsemester" />
-        <result column="courseName" jdbcType="VARCHAR" property="coursename" />
+        <result column="startSemester" jdbcType="VARCHAR" property="startSemester" />
+        <result column="courseName" jdbcType="VARCHAR" property="courseName" />
         <result column="score" jdbcType="VARCHAR" property="score" />
         <result column="credit" jdbcType="VARCHAR" property="credit" />
-        <result column="examinationMethod" jdbcType="VARCHAR" property="examinationmethod" />
-        <result column="courseAttribute" jdbcType="VARCHAR" property="courseattribute" />
-        <result column="alternativeCourseNumber" jdbcType="VARCHAR" property="alternativecoursenumber" />
-        <result column="alternativeCourseName" jdbcType="VARCHAR" property="alternativecoursename" />
-        <result column="markOfScore" jdbcType="VARCHAR" property="markofscore" />
+        <result column="examinationMethod" jdbcType="VARCHAR" property="examinationMethod" />
+        <result column="courseAttribute" jdbcType="VARCHAR" property="courseAttribute" />
+        <result column="alternativeCourseNumber" jdbcType="VARCHAR" property="alternativeCourseNumber" />
+        <result column="alternativeCourseName" jdbcType="VARCHAR" property="alternativeCourseName" />
+        <result column="markOfScore" jdbcType="VARCHAR" property="markOfScore" />
     </resultMap>
     <select id="getAllScoreCanCompare" resultMap="BaseResultMap">
 
