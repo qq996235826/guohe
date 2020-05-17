@@ -1,8 +1,5 @@
 package com.guohe.app.mapper;
 
-import java.util.HashMap;
-
-
 /**
  * @author/作者: 邓浩然
  * @description/描述:
@@ -13,5 +10,5 @@ public interface GpaExtMapper
     long gpaRankAtSemester(String uid,String schoolTerm, String gpa);
 
 
-
+    String gpaByUidAndSemester(String uid, String schoolTerm);
 }

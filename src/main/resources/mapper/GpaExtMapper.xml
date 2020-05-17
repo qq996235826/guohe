@@ -18,6 +18,11 @@
         select count(*) from gpa
         where ${schoolTerm} >#{gpa} and uid like #{uid}
     </select>
+    <select id="gpaByUidAndSemester" resultType="java.lang.String">
+
+        select ${schoolTerm} from gpa
+        where  uid = #{uid}
+    </select>
 
 
 </mapper>

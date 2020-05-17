@@ -61,7 +61,9 @@ public class ScoreController
             throw new CustomizeException(CustomizeErrorCode.RANK_INFO_LOST);
         }
         //用service去查排名
-        return ResultDTO.okOf(rankService.getGpaRank(info));
+        Long rank = rankService.getGpaRank(info);
+        ResultDTO resultDTO = ResultDTO.okOf(rank);
+        return resultDTO;
     }
 
     /**

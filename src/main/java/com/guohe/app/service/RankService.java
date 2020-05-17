@@ -7,6 +7,7 @@ import com.guohe.app.mapper.GpaExtMapper;
 import com.guohe.app.mapper.GpaMapper;
 import com.guohe.app.mapper.ScoreExtMapper;
 import com.guohe.app.mapper.ScoreMapper;
+import com.guohe.app.model.GpaExample;
 import com.guohe.app.model.Score;
 import com.guohe.app.model.ScoreExample;
 import org.apache.commons.lang3.StringUtils;
@@ -76,8 +77,11 @@ public class RankService
             //获得第几个学期
             String schoolTerm="semester"+semester(uid,info.getSemester()).toString();
 
+            //获得该同学绩点
+            String gpa=gpaExtMapper.gpaByUidAndSemester(info.getUid(),schoolTerm);
+
             //获得排名
-            Long rank=gpaExtMapper.gpaRankAtSemester(uid,schoolTerm,info.getGpa());
+            Long rank=gpaExtMapper.gpaRankAtSemester(uid,schoolTerm,gpa);
             return rank+1;
         }
         catch (Exception e)
