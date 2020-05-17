@@ -47,14 +47,13 @@ public class RankService
     {
         try
         {
-            ScoreExample example = new ScoreExample();
-            example.createCriteria().andCourseNameEqualTo(courseName).andStartSemesterEqualTo(startSemester).andScoreGreaterThan(score).andExaminationMethodEqualTo(examMethod);
-            long rank=scoreMapper.countByExample(example);
+            Long rank=scoreExtMapper.getRank(courseName,startSemester,score,examMethod);
             return rank+1;
         }
         catch (Exception e)
         {
             //抛出查询失败错误
+            e.printStackTrace();
             throw new CustomizeException(CustomizeErrorCode.SQL_SEARCH_FAIL);
         }
     }

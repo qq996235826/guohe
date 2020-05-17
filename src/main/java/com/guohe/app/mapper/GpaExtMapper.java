@@ -11,4 +11,6 @@ public interface GpaExtMapper
 
 
     String gpaByUidAndSemester(String uid, String schoolTerm);
+
+
 }

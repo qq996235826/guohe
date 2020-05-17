@@ -19,4 +19,10 @@
         select courseName ,score,examinationMethod from score
         where uid = #{uid} and startSemester=#{semester} and score %101!=0
     </select>
+    <select id="getRank" parameterType="com.guohe.app.model.ScoreExample" resultType="java.lang.Long">
+
+        select count(*) from score
+        where courseName = #{courseName} and startSemester = #{startSemester}
+        and examinationMethod = #{examMethod} and score > #{score}
+    </select>
 </mapper>

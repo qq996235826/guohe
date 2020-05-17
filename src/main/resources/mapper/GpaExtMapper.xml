@@ -21,8 +21,10 @@
     <select id="gpaByUidAndSemester" resultType="java.lang.String">
 
         select ${schoolTerm} from gpa
-        where  uid = #{uid}
+        where uid = #{uid}
     </select>
+
+
 
 
 </mapper>
