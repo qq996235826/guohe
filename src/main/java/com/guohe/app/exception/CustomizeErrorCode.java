@@ -6,10 +6,14 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode
     //其实这个枚举相当于一个方法,它就是下面的CustomizeErrorCode方法,调用该枚举就会把后面括号的东西作为方法参数来执行该方法
     //也就是把本类的message成员变成括号里的东西
     SYSTEM_ERROR(100,"其他错误"),
-    RANK_INFO_LOST(2000,"前端传来的用于查询的数据缺失"),
+    INFO_LOST(2000,"前端传来的用于查询的数据缺失"),
     JSON_WRONG(2001,"前端传参不规范"),
-    SQL_SEARCH_FAIL(3000,"数据库查询失败");
+    SQL_SEARCH_FAIL(3000,"数据库查询失败"),
+    SQL_INSERT_FAIL(4000,"数据库插入失败"),
+    SQL_UPDATE_FAIL(5000,"数据库更新失败");
+
     //当然,枚举可以有很多个,每个都是一个传入参数不同但是方法过程相同的东西
+
 
 
 

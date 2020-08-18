@@ -39,7 +39,7 @@ public class ScoreController
         //前端传参缺失
         if(info==null|| StringUtils.isBlank(info.getCourseName())||StringUtils.isBlank(info.getScore())||StringUtils.isBlank(info.getStartSemester()))
         {
-            throw new CustomizeException(CustomizeErrorCode.RANK_INFO_LOST);
+            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
         //用service去查排名
         Long rank = rankService.getRank(info.getCourseName(), info.getStartSemester(), info.getScore(),info.getExamMethod());
@@ -58,12 +58,11 @@ public class ScoreController
         //前端传参缺失
         if(info==null)
         {
-            throw new CustomizeException(CustomizeErrorCode.RANK_INFO_LOST);
+            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
         //用service去查排名
         Long rank = rankService.getGpaRank(info);
-        ResultDTO resultDTO = ResultDTO.okOf(rank);
-        return resultDTO;
+        return ResultDTO.okOf(rank);
     }
 
     /**
@@ -78,7 +77,7 @@ public class ScoreController
         //前端传参缺失
         if(info==null)
         {
-            throw new CustomizeException(CustomizeErrorCode.RANK_INFO_LOST);
+            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
         HashMap<String,String> rankMap=rankService.getAllRank(info.getUid(),info.getSemester());
         return ResultDTO.okOf(rankMap);

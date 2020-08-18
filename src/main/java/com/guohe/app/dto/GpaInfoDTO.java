@@ -14,5 +14,4 @@ public class GpaInfoDTO
     String uid;         //学号
     String semester;   //学期
     String gpa;   //当前学期绩点
-
 }

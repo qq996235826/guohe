@@ -32,7 +32,7 @@ public class ResultDTO<T>
     /**
      * @description/描述: 把错误对象转化成ResultDTO返回给前端,告诉用户错在哪
      * @param/参数: [errorCode]
-     * @return/返回: life.majiang.community.dto.ResultDTO
+     * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     public static ResultDTO errorOf(CustomizeErrorCode errorCode)
     {
@@ -42,7 +42,7 @@ public class ResultDTO<T>
     /**
      * @description/描述: 把CustomizeException类型的错误信息打包成ResultDTO返回
      * @param/参数: [CustomizeException]
-     * @return/返回: life.majiang.community.dto.ResultDTO
+     * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     public static ResultDTO errorOf(CustomizeException e)
     {
@@ -52,7 +52,7 @@ public class ResultDTO<T>
     /**
      * @description/描述: 本方法负责返回成功信息
      * @param/参数: 无
-     * @return/返回: life.majiang.community.dto.ResultDTO
+     * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     public static ResultDTO okOf()
     {
@@ -65,7 +65,7 @@ public class ResultDTO<T>
     /**
      * @description/描述:本方法返回成功的信息,还带一个传给前端的泛型数据,具体是啥看你怎么调用的
      * @param/参数: 泛型
-     * @return/返回: life.majiang.community.dto.ResultDTO
+     * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     public static <T> ResultDTO okOf(T t)
     {
