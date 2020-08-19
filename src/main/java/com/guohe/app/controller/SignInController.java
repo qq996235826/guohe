@@ -1,5 +1,6 @@
 package com.guohe.app.controller;
 
+import com.guohe.app.domain.SignInfo;
 import com.guohe.app.dto.InitiateSignInDTO;
 import com.guohe.app.dto.ResultDTO;
 import com.guohe.app.dto.SignInChangeDTO;
@@ -83,7 +84,7 @@ public class SignInController {
         {
             return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
         }
-        List<SignIn> signList=signInService.signInHistory(id);
+        List<SignInfo> signList=signInService.signInHistory(id);
         return ResultDTO.okOf(signList);    //返回签到是否成功
     }
 

@@ -1,5 +1,6 @@
 package com.guohe.app.dto;
 
+import com.guohe.app.domain.SignInfo;
 import com.guohe.app.domain.StuSignInfo;
 import com.guohe.app.model.SignIn;
 import lombok.Data;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
  **/
 @Data
 public class GetSignInDTO {
-    SignIn signIn;
+    SignInfo signIn;
     ArrayList<StuSignInfo> successList;
     ArrayList<StuSignInfo> failList;
 
     public GetSignInDTO(SignIn signIn, ArrayList<StuSignInfo> successList, ArrayList<StuSignInfo> failList) {
-        this.signIn = signIn;
+        this.signIn = new SignInfo(signIn);
         this.successList = successList;
         this.failList = failList;
     }

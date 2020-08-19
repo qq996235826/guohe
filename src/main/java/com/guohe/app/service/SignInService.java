@@ -1,5 +1,6 @@
 package com.guohe.app.service;
 
+import com.guohe.app.domain.SignInfo;
 import com.guohe.app.domain.StuSignInfo;
 import com.guohe.app.dto.GetSignInDTO;
 import com.guohe.app.dto.InitiateSignInDTO;
@@ -166,12 +167,18 @@ public class SignInService {
      * @Return: java.util.List
      * @Author: Mr.Deng
      */
-    public List signInHistory(String id) {
+    public List<SignInfo> signInHistory(String id) {
         try
         {
             SignInExample signInExample = new SignInExample();
             signInExample.createCriteria().andCreatorEqualTo(id);
-            return signInMapper.selectByExample(signInExample);
+            List<SignIn> signInList=signInMapper.selectByExample(signInExample);
+            List<SignInfo> signInfoList=new ArrayList<>();
+            for(int a=0;a<signInList.size();a++)
+            {
+                signInfoList.add(new SignInfo(signInList.get(a)));
+            }
+            return signInfoList;
         }
         catch (Exception e)
         {
