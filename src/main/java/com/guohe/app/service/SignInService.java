@@ -52,7 +52,7 @@ public class SignInService {
         signIn.setIsOverTime(0);        //设置未过期
         signIn.setCreator(signInInfo.getCreator());     //设置创建者
         signIn.setYear(signInInfo.getSemester());       //设置学年
-        signIn.setTime(signInInfo.getInterval());       //设置签到期限,单位是分钟
+        signIn.setTimeLimit(signInInfo.getInterval());       //设置签到期限,单位是分钟
         signIn.setName(signInInfo.getName());           //设置签到说明
         signIn.setLongitude(Double.valueOf(signInInfo.getLongitude())); //设置经纬度
         signIn.setLatitude(Double.valueOf(signInInfo.getLatitude()));
@@ -131,7 +131,7 @@ public class SignInService {
                     signDataMapper.insert(signData);
                     return "签到失败,签到已过期";
                 }
-                else if (System.currentTimeMillis() - signIn.getCreateTime() > signIn.getTime() * 60000) //签到过期,但是签到本体没更新状态
+                else if (System.currentTimeMillis() - signIn.getCreateTime() > signIn.getTimeLimit() * 60000) //签到过期,但是签到本体没更新状态
                 {
                     signIn.setIsOverTime(1);        //签到过期了
                     try {
@@ -167,9 +167,18 @@ public class SignInService {
      * @Author: Mr.Deng
      */
     public List signInHistory(String id) {
-        SignInExample signInExample = new SignInExample();
-        signInExample.createCriteria().andCreatorEqualTo(id);
-        return signInMapper.selectByExample(signInExample);
+        try
+        {
+            SignInExample signInExample = new SignInExample();
+            signInExample.createCriteria().andCreatorEqualTo(id);
+            return signInMapper.selectByExample(signInExample);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.SQL_SEARCH_FAIL);
+        }
+
     }
 
     /**
@@ -180,7 +189,11 @@ public class SignInService {
      */
     public SignIn updateSignInTime(String signId) {
         SignIn signIn = signInMapper.selectByPrimaryKey(Integer.valueOf(signId));    //从数据库获得签到实例
-        if (System.currentTimeMillis() - signIn.getCreateTime() >= signIn.getTime() * 60000)        //改签到已经过期
+        if(signIn==null)
+        {
+            throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
+        }
+        if (System.currentTimeMillis() - signIn.getCreateTime() >= signIn.getTimeLimit() * 60000)        //改签到已经过期
         {
             signIn.setIsOverTime(1);        //更新签到状态
         }
@@ -340,26 +353,27 @@ public class SignInService {
      * @Author: Mr.Deng
      */
     public String changeStatus(SignInChangeDTO signInChangeDTO) {
+        SignDataExample signInExample = new SignDataExample();
+        signInExample.createCriteria().andSignIdEqualTo(Integer.valueOf(signInChangeDTO.getSignId())).andStuNumEqualTo(signInChangeDTO.getStuId());
+        List<SignData> signIn=signDataMapper.selectByExample(signInExample);
+        if(signIn.size()!=1)
+        {
+            throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
+        }
+        else
+        {
+            signIn.get(0).setSigned(1);
+        }
         try {
-            SignDataExample signInExample = new SignDataExample();
-            signInExample.createCriteria().andSignIdEqualTo(Integer.valueOf(signInChangeDTO.getSignId())).andStuNumEqualTo(signInChangeDTO.getStuId());
-            List<SignData> signIn=signDataMapper.selectByExample(signInExample);
-            if(signIn.size()!=1)
-            {
-                return "更新失败";
-            }
-            else
-            {
-                signIn.get(0).setSigned(1);
-            }
             signDataMapper.updateByPrimaryKey(signIn.get(0));
-            return "签到成功";
         }
         catch (Exception e)
         {
             e.printStackTrace();
             throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
         }
+
+        return "签到成功";
 
     }
 }

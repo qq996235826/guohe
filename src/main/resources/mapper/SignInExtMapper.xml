@@ -23,11 +23,11 @@
         -->
         insert into sign_in (signInId, createTime, isOverTime,
         creator, longitude, latitude,
-        year, time, name, classes
-        )
+        year, timeLimit, name,
+        classes)
         values (#{signInId,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}, #{isOverTime,jdbcType=INTEGER},
         #{creator,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE},
-        #{year,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{classes,jdbcType=VARCHAR}
-        )
+        #{year,jdbcType=VARCHAR}, #{timeLimit,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{classes,jdbcType=VARCHAR})
     </insert>
 </mapper>

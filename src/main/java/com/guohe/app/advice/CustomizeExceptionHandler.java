@@ -47,17 +47,17 @@ public class CustomizeExceptionHandler
             {
                 //question下错误显示的信息
                 e.printStackTrace();
-                model.addAttribute("message", e.getMessage());
+                return ResultDTO.errorOf((CustomizeException) e);
             }
             else
             {
                 //其他错误显示的信息
                 e.printStackTrace();
-                model.addAttribute("message", CustomizeErrorCode.SYSTEM_ERROR.getMessage());
+                return ResultDTO.errorOf(CustomizeErrorCode.SYSTEM_ERROR);
             }
 
             //ModelAndView一般用于处理请求后,不仅要进行跳转,还要在跳转过程中传递数据的情形
-            return new ModelAndView("error");//括号里是错误页面名
+//            return new ModelAndView("error");//括号里是错误页面名
         }
 
 

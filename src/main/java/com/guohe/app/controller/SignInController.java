@@ -32,11 +32,11 @@ public class SignInController {
      * @Author: Mr.Deng
      */
     @ResponseBody
-    @PostMapping("/initiate")
+    @PostMapping("/api/v1/initiate")
     public ResultDTO initiateSignIn(@RequestBody InitiateSignInDTO initiateSignIn)
     {
         //前端传参缺失
-        if(initiateSignIn==null)
+        if(initiateSignIn==null||initiateSignIn.getSemester()==null||initiateSignIn.getCreator()==null||initiateSignIn.getLongitude()==null||initiateSignIn.getLatitude()==null)
         {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
@@ -52,11 +52,11 @@ public class SignInController {
      * @Author: Mr.Deng
      */
     @ResponseBody
-    @PostMapping("/signIn")
+    @PostMapping("/api/v1/signIn")
     public ResultDTO initiateSignIn(@RequestBody SignInInfoDTO signInInfo)
     {
         //前端传参缺失
-        if(signInInfo==null)
+        if(signInInfo==null||signInInfo.getStudentId()==null||signInInfo.getSignId()==null)
         {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
@@ -75,13 +75,13 @@ public class SignInController {
      * @Author: Mr.Deng
      */
     @ResponseBody
-    @GetMapping("/signInHistory")
+    @GetMapping("/api/v1/signInHistory")
     public ResultDTO signInHistory(@RequestParam("id")String id)
     {
         //前端传参缺失
         if(id==null|| Objects.equals(id, ""))
         {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
+            return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
         }
         List<SignIn> signList=signInService.signInHistory(id);
         return ResultDTO.okOf(signList);    //返回签到是否成功
@@ -94,25 +94,25 @@ public class SignInController {
      * @Author: Mr.Deng
      */
     @ResponseBody
-    @GetMapping("/getSignIn")
+    @GetMapping("/api/v1/signInfo")
     public ResultDTO getSignIn(@RequestParam("id")String id)
     {
         //前端传参缺失
         if(id==null|| Objects.equals(id, ""))
         {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
+            return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
         }
         return ResultDTO.okOf(signInService.getSignIn(id));    //返回签到是否成功
     }
 
     @ResponseBody
-    @PostMapping("/changeStatus")
+    @PostMapping("/api/v1/statusChange")
     public ResultDTO changeStatus(@RequestBody SignInChangeDTO signInChangeDTO)
     {
         //前端传参缺失
         if(signInChangeDTO==null)
         {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
+            return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
         }
         return ResultDTO.okOf(signInService.changeStatus(signInChangeDTO));    //返回签到是否成功
     }

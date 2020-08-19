@@ -33,7 +33,7 @@ public class ScoreController
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     @ResponseBody
-    @PostMapping("/scoreRank")
+    @PostMapping("/api/v1/scoreRank")
     public ResultDTO searchRank(@RequestBody ScoreInfoDTO info)//查询需要的信息
     {
         //前端传参缺失
@@ -52,7 +52,7 @@ public class ScoreController
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     @ResponseBody
-    @PostMapping("/gpaRank")
+    @PostMapping("/api/v1/gpaRank")
     public ResultDTO searchGpaRank(@RequestBody GpaInfoDTO info)//查询需要的信息
     {
         //前端传参缺失
@@ -71,7 +71,7 @@ public class ScoreController
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
     @ResponseBody
-    @PostMapping("/rank")
+    @PostMapping("/api/v1/rank")
     public ResultDTO getAllRank(@RequestBody GpaInfoDTO info)
     {
         //前端传参缺失
