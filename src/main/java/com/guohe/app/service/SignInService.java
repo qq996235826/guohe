@@ -172,6 +172,7 @@ public class SignInService {
         {
             SignInExample signInExample = new SignInExample();
             signInExample.createCriteria().andCreatorEqualTo(id);
+            signInExample.setOrderByClause("createTime DESC");
             List<SignIn> signInList=signInMapper.selectByExample(signInExample);
             List<SignInfo> signInfoList=new ArrayList<>();
             for(int a=0;a<signInList.size();a++)
