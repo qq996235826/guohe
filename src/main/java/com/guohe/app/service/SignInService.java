@@ -16,10 +16,8 @@ import com.guohe.app.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import static java.lang.StrictMath.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * @program: guo_he
@@ -170,14 +168,20 @@ public class SignInService {
     public List<SignInfo> signInHistory(String id) {
         try
         {
+
             SignInExample signInExample = new SignInExample();
             signInExample.createCriteria().andCreatorEqualTo(id);
             signInExample.setOrderByClause("createTime DESC");
             List<SignIn> signInList=signInMapper.selectByExample(signInExample);
+            List<SignIn> newSignList=new ArrayList<>();
+            for(int a=0;a<signInList.size();a++)
+            {
+                newSignList.add(updateSignInTime(String.valueOf(signInList.get(a).getSignInId())));
+            }
             List<SignInfo> signInfoList=new ArrayList<>();
             for(int a=0;a<signInList.size();a++)
             {
-                signInfoList.add(new SignInfo(signInList.get(a)));
+                signInfoList.add(new SignInfo(newSignList.get(a)));
             }
             return signInfoList;
         }
@@ -265,17 +269,21 @@ public class SignInService {
         List<StuInfo> notList=getFailList(stuInfoList,successList,lateList);
 
         //获得签到成功的信息列表
-        ArrayList<StuSignInfo> successInfoList=signDataToStuSignInfo(successList,stuInfoList,"成功签到");
+        ArrayList<StuSignInfo> successInfoList=signDataToStuSignInfo(successList,stuInfoList,"1");  //成功签到
 
         //获得失败的信息列表,包含了迟到和没签到的
-        ArrayList<StuSignInfo> failInfoList=signDataToStuSignInfo(lateList,stuInfoList,"迟到");
+        ArrayList<StuSignInfo> failInfoList=signDataToStuSignInfo(lateList,stuInfoList,"0");    //迟到
+        successInfoList.addAll(failInfoList);
+
+        //获得旷课的名单
+        ArrayList<StuSignInfo> lostList=new ArrayList<>();
         for(int a=0;a<notList.size();a++)
         {
-            failInfoList.add(new StuSignInfo(notList.get(a).getName(),notList.get(a).getUid(),"旷课"));
+            lostList.add(new StuSignInfo(notList.get(a).getName(),notList.get(a).getUid(),"3"));        //旷课
         }
 
 
-        return new GetSignInDTO(signIn,successInfoList,failInfoList);
+        return new GetSignInDTO(signIn,successInfoList,lostList);
     }
 
     /**
@@ -355,7 +363,7 @@ public class SignInService {
 
 
     /**
-     * @Description: 更新签到状态,改成成功签到
+     * @Description: 更新签到状态
      * @Param: [signInChangeDTO]
      * @Return: java.lang.Void
      * @Author: Mr.Deng
@@ -364,13 +372,41 @@ public class SignInService {
         SignDataExample signInExample = new SignDataExample();
         signInExample.createCriteria().andSignIdEqualTo(Integer.valueOf(signInChangeDTO.getSignId())).andStuNumEqualTo(signInChangeDTO.getStuId());
         List<SignData> signIn=signDataMapper.selectByExample(signInExample);
-        if(signIn.size()!=1)
+        if(signIn.size()>1)
         {
             throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
         }
-        else
+        else if(signIn.size()==0)       //数据库中没有数据
         {
-            signIn.get(0).setSigned(1);
+            if(Objects.equals(signInChangeDTO.getStatus(), "1"))        //新增签到成功数据
+            {
+                SignData signData=new SignData();
+                signData.setSigned(1);
+                signData.setStuNum(signInChangeDTO.getStuId());
+                signData.setSignId(Integer.valueOf(signInChangeDTO.getSignId()));
+                signData.setSignTime(System.currentTimeMillis());
+                signDataMapper.insert(signData);
+            }
+            else if(Objects.equals(signInChangeDTO.getStatus(), "0"))  //新增迟到数据
+            {
+                SignData signData=new SignData();
+                signData.setSigned(0);
+                signData.setStuNum(signInChangeDTO.getStuId());
+                signData.setSignId(Integer.valueOf(signInChangeDTO.getSignId()));
+                signData.setSignTime(System.currentTimeMillis());
+                signDataMapper.insert(signData);
+            }
+        }
+        else if(signIn.size()==1)   //已经有了数据
+        {
+            if(Objects.equals(signInChangeDTO.getStatus(), "1"))
+            {
+                signIn.get(0).setSigned(1);
+            }
+            else if(Objects.equals(signInChangeDTO.getStatus(), "0"))
+            {
+                signIn.get(0).setSigned(0);
+            }
         }
         try {
             signDataMapper.updateByPrimaryKey(signIn.get(0));

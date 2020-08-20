@@ -12,4 +12,5 @@ import lombok.Data;
 public class SignInChangeDTO {
     String signId;
     String stuId;
+    String status;      //状态代码,0迟到,1成功,3旷课
 }
