@@ -395,6 +395,10 @@ public class SignInService {
                 signData.setSignTime(System.currentTimeMillis());
                 signDataMapper.insert(signData);
             }
+            else if(Objects.equals(signInChangeDTO.getStatus(), "2"))
+            {
+
+            }
             else
             {
                 throw new CustomizeException(CustomizeErrorCode.STATUS_WRONG);
@@ -409,6 +413,10 @@ public class SignInService {
             else if(Objects.equals(signInChangeDTO.getStatus(), "0"))
             {
                 signIn.get(0).setSigned(0);
+            }
+            else if(Objects.equals(signInChangeDTO.getStatus(), "2"))       //旷课删除记录
+            {
+                signDataMapper.deleteByPrimaryKey(signIn.get(0).getId());
             }
             else
             {
