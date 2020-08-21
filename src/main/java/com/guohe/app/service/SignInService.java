@@ -168,7 +168,6 @@ public class SignInService {
     public List<SignInfo> signInHistory(String id) {
         try
         {
-
             SignInExample signInExample = new SignInExample();
             signInExample.createCriteria().andCreatorEqualTo(id);
             signInExample.setOrderByClause("createTime DESC");
@@ -203,7 +202,7 @@ public class SignInService {
         SignIn signIn = signInMapper.selectByPrimaryKey(Integer.valueOf(signId));    //从数据库获得签到实例
         if(signIn==null)
         {
-            throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
+            throw new CustomizeException(CustomizeErrorCode.SIGN_ID_WRONG);
         }
         if (System.currentTimeMillis() - signIn.getCreateTime() >= signIn.getTimeLimit() * 60000)        //改签到已经过期
         {
@@ -279,9 +278,8 @@ public class SignInService {
         ArrayList<StuSignInfo> lostList=new ArrayList<>();
         for(int a=0;a<notList.size();a++)
         {
-            lostList.add(new StuSignInfo(notList.get(a).getName(),notList.get(a).getUid(),"3"));        //旷课
+            lostList.add(new StuSignInfo(notList.get(a).getName(),notList.get(a).getUid(),"2"));        //旷课
         }
-
 
         return new GetSignInDTO(signIn,successInfoList,lostList);
     }
@@ -369,12 +367,13 @@ public class SignInService {
      * @Author: Mr.Deng
      */
     public String changeStatus(SignInChangeDTO signInChangeDTO) {
+        SignIn sign=signInMapper.selectByPrimaryKey(Integer.valueOf(signInChangeDTO.getSignId()));
         SignDataExample signInExample = new SignDataExample();
         signInExample.createCriteria().andSignIdEqualTo(Integer.valueOf(signInChangeDTO.getSignId())).andStuNumEqualTo(signInChangeDTO.getStuId());
         List<SignData> signIn=signDataMapper.selectByExample(signInExample);
-        if(signIn.size()>1)
+        if(signIn.size()>1||sign==null)
         {
-            throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
+            throw new CustomizeException(CustomizeErrorCode.SIGN_ID_WRONG);
         }
         else if(signIn.size()==0)       //数据库中没有数据
         {
@@ -396,6 +395,10 @@ public class SignInService {
                 signData.setSignTime(System.currentTimeMillis());
                 signDataMapper.insert(signData);
             }
+            else
+            {
+                throw new CustomizeException(CustomizeErrorCode.STATUS_WRONG);
+            }
         }
         else if(signIn.size()==1)   //已经有了数据
         {
@@ -407,17 +410,20 @@ public class SignInService {
             {
                 signIn.get(0).setSigned(0);
             }
+            else
+            {
+                throw new CustomizeException(CustomizeErrorCode.STATUS_WRONG);
+            }
+            try {
+                signDataMapper.updateByPrimaryKey(signIn.get(0));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
+            }
         }
-        try {
-            signDataMapper.updateByPrimaryKey(signIn.get(0));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
-        }
-
-        return "签到成功";
+        return "更改状态成功";
 
     }
 }
