@@ -5,6 +5,7 @@ import com.guohe.app.dto.ResultDTO;
 import com.guohe.app.dto.SignInChangeDTO;
 import com.guohe.app.dto.SignInInfoDTO;
 import com.guohe.app.service.SignInService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
  * @author: Mr.Deng
  * @create: 2020-08-09 18:52
  **/
+@RestController
 @RequestMapping("/api/v1")
 public class SignInController {
     @Resource
@@ -58,7 +60,7 @@ public class SignInController {
      * @param id
      * @return
      */
-    @GetMapping("/signInHistory")
+    @GetMapping("/api/v1/signInHistory")
     public ResultDTO signInHistory(@RequestParam("id") String id) {
         return signInService.signInHistory(id);    //返回签到是否成功
     }

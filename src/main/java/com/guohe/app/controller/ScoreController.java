@@ -9,10 +9,7 @@ import com.guohe.app.service.RankService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -23,6 +20,7 @@ import java.util.HashMap;
  * @description/描述: 负责查询排名的controller
  * @data/创建日期: 2020-05-16 21:08
  **/
+@RestController
 @RequestMapping("/api/v1")
 public class ScoreController {
     @Resource
