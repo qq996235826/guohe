@@ -2,7 +2,10 @@ package com.guohe.app.service;
 
 import com.guohe.app.domain.SignInfo;
 import com.guohe.app.domain.StuSignInfo;
-import com.guohe.app.dto.*;
+import com.guohe.app.dto.GetSignInDTO;
+import com.guohe.app.dto.InitiateSignInDTO;
+import com.guohe.app.dto.SignInChangeDTO;
+import com.guohe.app.dto.SignInInfoDTO;
 import com.guohe.app.exception.CustomizeErrorCode;
 import com.guohe.app.exception.CustomizeException;
 import com.guohe.app.mapper.SignDataMapper;
@@ -10,12 +13,15 @@ import com.guohe.app.mapper.SignInExtMapper;
 import com.guohe.app.mapper.SignInMapper;
 import com.guohe.app.mapper.StuInfoMapper;
 import com.guohe.app.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
-import static java.lang.StrictMath.*;
-
+import javax.annotation.Resource;
 import java.util.*;
+
+import static java.lang.StrictMath.*;
 
 /**
  * @program: guo_he
@@ -25,13 +31,14 @@ import java.util.*;
  **/
 @Service
 public class SignInService {
-    @Autowired
+
+    @Resource
     SignInMapper signInMapper;
-    @Autowired
+    @Resource
     SignInExtMapper signInExtMapper;
-    @Autowired
+    @Resource
     SignDataMapper signDataMapper;
-    @Autowired
+    @Resource
     StuInfoMapper stuInfoMapper;
 
     double precision = 200; //签到范围,目前单位是米
@@ -43,9 +50,11 @@ public class SignInService {
      * @Return: java.lang.Integer
      * @Author: Mr.Deng
      */
-    public Integer createSignIn(InitiateSignInDTO signInInfo) {
+    public int createSignIn(InitiateSignInDTO signInInfo) {
         //前端传参缺失
-        if (signInInfo == null || signInInfo.getSemester() == null || signInInfo.getCreator() == null || signInInfo.getLongitude() == null || signInInfo.getLatitude() == null||signInInfo.getInterval()==null||signInInfo.getClasses().size()==0) {
+        if (signInInfo == null || StringUtils.isEmpty(signInInfo.getLongitude())
+                || StringUtils.isEmpty(signInInfo.getCreator()) || !StringUtils.isNumeric(signInInfo.getLongitude())
+                || !StringUtils.isNumeric(signInInfo.getLatitude()) || signInInfo.getInterval() == null || CollectionUtils.isEmpty(signInInfo.getClasses())) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST); //学年,创建者ID,经纬度,签到时间限制,签到班级都不可以为空
         }
         SignIn signIn = new SignIn();     //新建一个签到类,用于放在数据库中
@@ -55,19 +64,21 @@ public class SignInService {
         signIn.setYear(signInInfo.getSemester());       //设置学年
         signIn.setTimeLimit(signInInfo.getInterval());       //设置签到期限,单位是分钟
         signIn.setName(signInInfo.getName());           //设置签到说明
-        signIn.setLongitude(Double.valueOf(signInInfo.getLongitude())); //设置经纬度
-        signIn.setLatitude(Double.valueOf(signInInfo.getLatitude()));
-        StringBuffer classes = new StringBuffer();        //设置班级
+        signIn.setLongitude(NumberUtils.toDouble(signInInfo.getLongitude())); //设置经纬度
+        signIn.setLatitude(NumberUtils.toDouble(signInInfo.getLatitude()));
 
+//        StringBuffer classes = new StringBuffer();        //设置班级
+//
+//        //获得需要签到的班级号
+//        for (int a = 0; a < signInInfo.getClasses().size(); a++) {
+//            classes.append(signInInfo.getClasses().get(a)).append(",");
+//        }
+//        signIn.setClasses(String.valueOf(classes));
         //获得需要签到的班级号
-        for (int a = 0; a < signInInfo.getClasses().size(); a++) {
-            classes.append(signInInfo.getClasses().get(a)).append(",");
-        }
-        signIn.setClasses(String.valueOf(classes));
+        signIn.setClasses(String.join(",", signInInfo.getClasses()));
 
-        int i=signInExtMapper.insertAndGetKey(signIn);    //插入数据,这个语句会在插入时把自增的主键返回给signIn
-        if(i==0)
-        {
+        int i = signInExtMapper.insertAndGetKey(signIn);    //插入数据,这个语句会在插入时把自增的主键返回给signIn
+        if (i == 0) {
             throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);   //数据插入失败异常
         }
         return signIn.getSignInId();
@@ -81,7 +92,7 @@ public class SignInService {
      */
     public String SignIn(SignInInfoDTO signInInfo) {
         //前端传参缺失
-        if (signInInfo == null || signInInfo.getStudentId() == null || signInInfo.getSignId() == null||signInInfo.getLatitude()==null||signInInfo.getLongitude()==null) {
+        if (signInInfo == null || signInInfo.getStudentId() == null || signInInfo.getSignId() == null || signInInfo.getLatitude() == null || signInInfo.getLongitude() == null) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         } else if (Integer.parseInt(signInInfo.getSignId()) <= 0)   //签到验证码也就是签到ID小于或等于0
         {
@@ -96,28 +107,25 @@ public class SignInService {
         //4.检查签到范围*
         //5.检查是否已经签到过了*
 
-
         //检查是否已经签到过了,如果签到过了,数据不会写入数据库,我确保在一个签到内,每个学生在数据库中有且仅有一个有效数据
         SignDataExample signDataExample = new SignDataExample();
         signDataExample.createCriteria().andSignIdEqualTo(Integer.valueOf(signInInfo.getSignId())).andStuNumEqualTo(signInInfo.getStudentId());
         List<SignData> dataList = signDataMapper.selectByExample(signDataExample);
         if (dataList.size() != 0) {
-            SignData signData=dataList.get(0);
+            SignData signData = dataList.get(0);
             signData.setSignTime(System.currentTimeMillis());       //更新签到时间
             signData.setLatitude(Double.valueOf(signInInfo.getLatitude())); //设置经纬度
             signData.setLongitude(Double.valueOf(signInInfo.getLongitude()));
-            if(dataList.get(0).getSigned()!=2)  //如果之前的签到记录只是位置不对,那么就继续往下跑
+            if (dataList.get(0).getSigned() != 2)  //如果之前的签到记录只是位置不对,那么就继续往下跑
             {
                 throw new CustomizeException(CustomizeErrorCode.HAVE_SIGNED);
-            }
-            else{//数据库里有一个位置不对的签到数据的情况
+            } else {//数据库里有一个位置不对的签到数据的情况
                 //检查签到是否到期
                 if (signIn.getIsOverTime() == 1) {
-                    signData=dataList.get(0);
+                    signData = dataList.get(0);
                     signData.setSigned(0);  //迟到
-                    int i=signDataMapper.updateByPrimaryKey(signData);
-                    if(i==0)
-                    {
+                    int i = signDataMapper.updateByPrimaryKey(signData);
+                    if (i == 0) {
                         throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
                     }
                     throw new CustomizeException(CustomizeErrorCode.SIGN_TIMEOUT);
@@ -125,14 +133,12 @@ public class SignInService {
                 {
                     signIn.setIsOverTime(1);        //签到过期了
                     signData.setSigned(0);
-                    int i=signDataMapper.updateByPrimaryKey(signData);  //签到数据插入数据库
-                    if(i==0)
-                    {
+                    int i = signDataMapper.updateByPrimaryKey(signData);  //签到数据插入数据库
+                    if (i == 0) {
                         throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
                     }
-                    int g=signInMapper.updateByPrimaryKey(signIn);        //写入数据库
-                    if(g==0)
-                    {
+                    int g = signInMapper.updateByPrimaryKey(signIn);        //写入数据库
+                    if (g == 0) {
                         throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
                     }
                     throw new CustomizeException(CustomizeErrorCode.SIGN_TIMEOUT);
@@ -178,9 +184,8 @@ public class SignInService {
             //检查签到是否到期
             if (signIn.getIsOverTime() == 1) {
                 signData.setSigned(0);
-                int i=signDataMapper.insert(signData);
-                if(i==0)
-                {
+                int i = signDataMapper.insert(signData);
+                if (i == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
                 }
                 throw new CustomizeException(CustomizeErrorCode.SIGN_TIMEOUT);
@@ -188,14 +193,12 @@ public class SignInService {
             {
                 signIn.setIsOverTime(1);        //签到过期了
                 signData.setSigned(0);
-                int i=signDataMapper.insert(signData);  //签到数据插入数据库
-                if(i==0)
-                {
+                int i = signDataMapper.insert(signData);  //签到数据插入数据库
+                if (i == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
                 }
-                int g=signInMapper.updateByPrimaryKey(signIn);        //写入数据库
-                if(g==0)
-                {
+                int g = signInMapper.updateByPrimaryKey(signIn);        //写入数据库
+                if (g == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
                 }
                 throw new CustomizeException(CustomizeErrorCode.SIGN_TIMEOUT);
@@ -257,9 +260,8 @@ public class SignInService {
         {
             signIn.setIsOverTime(1);        //更新签到状态
         }
-        int i=signInMapper.updateByPrimaryKey(signIn);        //写入数据库
-        if(i==0)
-        {
+        int i = signInMapper.updateByPrimaryKey(signIn);        //写入数据库
+        if (i == 0) {
             throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
         }
         return signIn;
@@ -415,12 +417,9 @@ public class SignInService {
         List<SignData> signIn = signDataMapper.selectByExample(signInExample);      //获得签到记录
         if (sign == null) {
             throw new CustomizeException(CustomizeErrorCode.SIGN_ID_WRONG);
-        }
-        else if(signIn.size() > 1)
-        {
+        } else if (signIn.size() > 1) {
             throw new CustomizeException(CustomizeErrorCode.SQL_SEARCH_FAIL);
-        }
-        else if (signIn.size() == 0)       //数据库中没有数据
+        } else if (signIn.size() == 0)       //数据库中没有数据
         {
             SignData signData = new SignData();     //新建签到数据
             signData.setStuNum(signInChangeDTO.getStuId());
@@ -429,25 +428,22 @@ public class SignInService {
             if (Objects.equals(signInChangeDTO.getStatus(), "1"))        //新增签到成功数据
             {
                 signData.setSigned(1);
-                int i=signDataMapper.insert(signData);
-                if(i==0)
-                {
+                int i = signDataMapper.insert(signData);
+                if (i == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
                 }
             } else if (Objects.equals(signInChangeDTO.getStatus(), "0"))  //新增迟到数据
             {
                 signData.setSigned(0);
-                int i=signDataMapper.insert(signData);
-                if(i==0)
-                {
+                int i = signDataMapper.insert(signData);
+                if (i == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
                 }
             } else if (Objects.equals(signInChangeDTO.getStatus(), "2"))    //新增旷课数据
             {
                 signData.setSigned(2);
-                int i=signDataMapper.insert(signData);
-                if(i==0)
-                {
+                int i = signDataMapper.insert(signData);
+                if (i == 0) {
                     throw new CustomizeException(CustomizeErrorCode.SQL_INSERT_FAIL);
                 }
             } else {
@@ -465,13 +461,11 @@ public class SignInService {
             } else {
                 throw new CustomizeException(CustomizeErrorCode.STATUS_WRONG);
             }
-            int i=signDataMapper.updateByPrimaryKey(signIn.get(0));
-            if(i==0)
-            {
+            int i = signDataMapper.updateByPrimaryKey(signIn.get(0));
+            if (i == 0) {
                 throw new CustomizeException(CustomizeErrorCode.SQL_UPDATE_FAIL);
             }
         }
         return "更改状态成功";
-
     }
 }

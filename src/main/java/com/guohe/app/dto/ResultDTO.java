@@ -9,10 +9,10 @@ import lombok.Data;
  * @description 负责给前端返回操作结果, 成功或者失败等等以及数据Data
  */
 @Data
-public class ResultDTO<T> {
+public class ResultDTO {
     private Integer status;   //状态代码
     private String message; //操作结果的详细信息
-    private T data;         //返回给前端的数据,是个泛型
+    private Object data;         //返回给前端的数据,是个泛型
 
     /**
      * 描述:本方法类似构造方法,把错误代码和信息传入,返回一个本对象
@@ -63,7 +63,7 @@ public class ResultDTO<T> {
      * @param/参数: 泛型
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    public static <T> ResultDTO okOf(T t) {
+    public static ResultDTO okOf(Object t) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setStatus(200);
         resultDTO.setMessage("请求成功");
