@@ -17,7 +17,6 @@ import javax.annotation.Resource;
  **/
 @RequestMapping("/api/v1")
 public class SignInController {
-
     @Resource
     private SignInService signInService;
 
@@ -28,7 +27,7 @@ public class SignInController {
      */
     @PostMapping("/initiate")
     public ResultDTO initiateSignIn(@RequestBody InitiateSignInDTO initiateSignIn) {
-        return ResultDTO.okOf(signInService.createSignIn(initiateSignIn));//创建签到类,返回签到验证码,也是该签到在数据库里的id
+        return signInService.createSignIn(initiateSignIn);//创建签到类,返回签到验证码,也是该签到在数据库里的id
     }
 
     /**
@@ -39,7 +38,7 @@ public class SignInController {
      */
     @PostMapping("/signIn")
     public ResultDTO initiateSignIn(@RequestBody SignInInfoDTO signInInfo) {
-        return ResultDTO.okOf(signInService.doSignIn(signInInfo));    //返回签到是否成功
+        return signInService.doSignIn(signInInfo);    //返回签到是否成功
     }
 
     /**
@@ -50,7 +49,7 @@ public class SignInController {
      */
     @PostMapping("/statusChange")
     public ResultDTO changeStatus(@RequestBody SignInChangeDTO signInChangeDTO) {
-        return ResultDTO.okOf(signInService.changeStatus(signInChangeDTO));    //返回更改是否成功
+        return signInService.changeStatus(signInChangeDTO);    //返回更改是否成功
     }
 
     /**
@@ -61,7 +60,7 @@ public class SignInController {
      */
     @GetMapping("/signInHistory")
     public ResultDTO signInHistory(@RequestParam("id") String id) {
-        return ResultDTO.okOf(signInService.signInHistory(id));    //返回签到是否成功
+        return signInService.signInHistory(id);    //返回签到是否成功
     }
 
     /**
@@ -72,6 +71,6 @@ public class SignInController {
      */
     @GetMapping("/signInfo")
     public ResultDTO getSignIn(@RequestParam("id") String id) {
-        return ResultDTO.okOf(signInService.getSignIn(id));    //返回签到是否成功
+        return signInService.getSignIn(id);    //返回签到是否成功
     }
 }

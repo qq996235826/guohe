@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 
 /**
@@ -21,9 +23,9 @@ import java.util.HashMap;
  * @description/描述: 负责查询排名的controller
  * @data/创建日期: 2020-05-16 21:08
  **/
-@Controller
+@RequestMapping("/api/v1")
 public class ScoreController {
-    @Autowired
+    @Resource
     private RankService rankService;
 
     /***
@@ -31,17 +33,10 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @ResponseBody
     @PostMapping("/api/v1/scoreRank")
     public ResultDTO searchRank(@RequestBody ScoreInfoDTO info)//查询需要的信息
     {
-        //前端传参缺失
-        if (info == null || StringUtils.isBlank(info.getCourseName()) || StringUtils.isBlank(info.getScore()) || StringUtils.isBlank(info.getStartSemester())) {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
-        }
-        //用service去查排名
-        Long rank = rankService.getRank(info.getCourseName(), info.getStartSemester(), info.getScore(), info.getExamMethod());
-        return ResultDTO.okOf(rank);
+        return rankService.getRank(info);
     }
 
     /**
@@ -49,17 +44,10 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @ResponseBody
     @PostMapping("/api/v1/gpaRank")
     public ResultDTO searchGpaRank(@RequestBody GpaInfoDTO info)//查询需要的信息
     {
-        //前端传参缺失
-        if (info == null) {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
-        }
-        //用service去查排名
-        Long rank = rankService.getGpaRank(info);
-        return ResultDTO.okOf(rank);
+        return rankService.getGpaRank(info);
     }
 
     /**
@@ -67,14 +55,9 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @ResponseBody
     @PostMapping("/api/v1/rank")
-    public ResultDTO getAllRank(@RequestBody GpaInfoDTO info) {
-        //前端传参缺失
-        if (info == null) {
-            throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
-        }
-        HashMap<String, String> rankMap = rankService.getAllRank(info.getUid(), info.getSemester());
-        return ResultDTO.okOf(rankMap);
+    public ResultDTO getAllRank(@RequestBody GpaInfoDTO info)
+    {
+        return rankService.getAllRank(info);
     }
 }
