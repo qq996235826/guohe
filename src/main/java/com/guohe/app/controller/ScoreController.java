@@ -31,7 +31,7 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @PostMapping("/api/v1/scoreRank")
+    @PostMapping("/scoreRank")
     public ResultDTO searchRank(@RequestBody ScoreInfoDTO info)//查询需要的信息
     {
         return rankService.getRank(info);
@@ -42,7 +42,7 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @PostMapping("/api/v1/gpaRank")
+    @PostMapping("/gpaRank")
     public ResultDTO searchGpaRank(@RequestBody GpaInfoDTO info)//查询需要的信息
     {
         return rankService.getGpaRank(info);
@@ -53,7 +53,7 @@ public class ScoreController {
      * @param/参数: [info]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    @PostMapping("/api/v1/rank")
+    @PostMapping("/rank")
     public ResultDTO getAllRank(@RequestBody GpaInfoDTO info)
     {
         return rankService.getAllRank(info);
