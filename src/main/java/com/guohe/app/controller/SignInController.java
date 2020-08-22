@@ -60,7 +60,7 @@ public class SignInController {
      * @param id
      * @return
      */
-    @GetMapping("/api/v1/signInHistory")
+    @GetMapping("/signInHistory")
     public ResultDTO signInHistory(@RequestParam("id") String id) {
         return signInService.signInHistory(id);    //返回签到是否成功
     }
