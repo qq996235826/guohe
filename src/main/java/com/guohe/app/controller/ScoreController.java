@@ -22,8 +22,7 @@ import java.util.HashMap;
  * @data/创建日期: 2020-05-16 21:08
  **/
 @Controller
-public class ScoreController
-{
+public class ScoreController {
     @Autowired
     private RankService rankService;
 
@@ -37,12 +36,11 @@ public class ScoreController
     public ResultDTO searchRank(@RequestBody ScoreInfoDTO info)//查询需要的信息
     {
         //前端传参缺失
-        if(info==null|| StringUtils.isBlank(info.getCourseName())||StringUtils.isBlank(info.getScore())||StringUtils.isBlank(info.getStartSemester()))
-        {
+        if (info == null || StringUtils.isBlank(info.getCourseName()) || StringUtils.isBlank(info.getScore()) || StringUtils.isBlank(info.getStartSemester())) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
         //用service去查排名
-        Long rank = rankService.getRank(info.getCourseName(), info.getStartSemester(), info.getScore(),info.getExamMethod());
+        Long rank = rankService.getRank(info.getCourseName(), info.getStartSemester(), info.getScore(), info.getExamMethod());
         return ResultDTO.okOf(rank);
     }
 
@@ -56,8 +54,7 @@ public class ScoreController
     public ResultDTO searchGpaRank(@RequestBody GpaInfoDTO info)//查询需要的信息
     {
         //前端传参缺失
-        if(info==null)
-        {
+        if (info == null) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
         //用service去查排名
@@ -72,14 +69,12 @@ public class ScoreController
      **/
     @ResponseBody
     @PostMapping("/api/v1/rank")
-    public ResultDTO getAllRank(@RequestBody GpaInfoDTO info)
-    {
+    public ResultDTO getAllRank(@RequestBody GpaInfoDTO info) {
         //前端传参缺失
-        if(info==null)
-        {
+        if (info == null) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
         }
-        HashMap<String,String> rankMap=rankService.getAllRank(info.getUid(),info.getSemester());
+        HashMap<String, String> rankMap = rankService.getAllRank(info.getUid(), info.getSemester());
         return ResultDTO.okOf(rankMap);
     }
 }

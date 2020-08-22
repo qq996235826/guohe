@@ -6,23 +6,22 @@ import com.guohe.app.exception.CustomizeException;
 import lombok.Data;
 
 /**
- * @description 负责给前端返回操作结果,成功或者失败等等以及数据Data
+ * @description 负责给前端返回操作结果, 成功或者失败等等以及数据Data
  */
 @Data
-public class ResultDTO<T>
-{
+public class ResultDTO<T> {
     private Integer status;   //状态代码
     private String message; //操作结果的详细信息
     private T data;         //返回给前端的数据,是个泛型
 
     /**
      * 描述:本方法类似构造方法,把错误代码和信息传入,返回一个本对象
+     *
      * @param code
      * @param message
      * @return ResultDTO
      */
-    public static ResultDTO errorOf(Integer code, String message)
-    {
+    public static ResultDTO errorOf(Integer code, String message) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setStatus(code);
         resultDTO.setMessage(message);
@@ -30,13 +29,12 @@ public class ResultDTO<T>
     }
 
     /**
-     * @description/描述: 把错误对象转化成ResultDTO返回给前端,告诉用户错在哪
+     * @description/描述: 把错误对象转化成ResultDTO返回给前端, 告诉用户错在哪
      * @param/参数: [errorCode]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    public static ResultDTO errorOf(CustomizeErrorCode errorCode)
-    {
-        return errorOf(errorCode.getCode(),errorCode.getMessage());
+    public static ResultDTO errorOf(CustomizeErrorCode errorCode) {
+        return errorOf(errorCode.getCode(), errorCode.getMessage());
     }
 
     /**
@@ -44,9 +42,8 @@ public class ResultDTO<T>
      * @param/参数: [CustomizeException]
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    public static ResultDTO errorOf(CustomizeException e)
-    {
-        return errorOf(e.getCode(),e.getMessage());
+    public static ResultDTO errorOf(CustomizeException e) {
+        return errorOf(e.getCode(), e.getMessage());
     }
 
     /**
@@ -54,9 +51,8 @@ public class ResultDTO<T>
      * @param/参数: 无
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    public static ResultDTO okOf()
-    {
-        ResultDTO resultDTO=new ResultDTO();
+    public static ResultDTO okOf() {
+        ResultDTO resultDTO = new ResultDTO();
         resultDTO.setStatus(200);
         resultDTO.setMessage("请求成功");
         return resultDTO;
@@ -67,16 +63,13 @@ public class ResultDTO<T>
      * @param/参数: 泛型
      * @return/返回: com.guohe.app.dto.ResultDTO
      **/
-    public static <T> ResultDTO okOf(T t)
-    {
-        ResultDTO resultDTO=new ResultDTO();
+    public static <T> ResultDTO okOf(T t) {
+        ResultDTO resultDTO = new ResultDTO();
         resultDTO.setStatus(200);
         resultDTO.setMessage("请求成功");
         resultDTO.setData(t);
         return resultDTO;
     }
-
-
 
 
 }

@@ -36,17 +36,17 @@ public class SignInfo {
 
     public SignInfo(SignIn signIn) {
         this.signInId = signIn.getSignInId();
-        this.isOverTime=signIn.getIsOverTime();
-        this.creator=signIn.getCreator();
-        this.longitude=signIn.getLongitude();
-        this.latitude=signIn.getLatitude();
-        this.year=signIn.getYear();
-        this.timeLimit=signIn.getTimeLimit();
-        this.name=signIn.getName();
-        this.classes=signIn.getClasses();
-        Date date=new Date();
+        this.isOverTime = signIn.getIsOverTime();
+        this.creator = signIn.getCreator();
+        this.longitude = signIn.getLongitude();
+        this.latitude = signIn.getLatitude();
+        this.year = signIn.getYear();
+        this.timeLimit = signIn.getTimeLimit();
+        this.name = signIn.getName();
+        this.classes = signIn.getClasses();
+        Date date = new Date();
         date.setTime(signIn.getCreateTime());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.createTime=simpleDateFormat.format(date);
+        this.createTime = simpleDateFormat.format(date);
     }
 }

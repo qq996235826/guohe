@@ -6,8 +6,7 @@ package com.guohe.app.dto;
  * @description/描述: 排名DTO
  * @data/创建日期: 2020-05-17 15:22
  **/
-public class RankDTO
-{
+public class RankDTO {
     String scoreName;//科目名
     String rank;    //排名
 }

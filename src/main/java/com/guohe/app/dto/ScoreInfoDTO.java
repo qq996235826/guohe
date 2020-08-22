@@ -9,8 +9,7 @@ import lombok.Data;
  * @data/创建日期: 2020-05-16 22:12
  **/
 @Data
-public class ScoreInfoDTO
-{
+public class ScoreInfoDTO {
     private String startSemester;   //学期
     private String courseName;      //课程名
     private String score;           //该学生该科成绩
