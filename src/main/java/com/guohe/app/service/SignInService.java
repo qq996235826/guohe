@@ -90,7 +90,7 @@ public class SignInService {
      * @Return: java.lang.String
      * @Author: Mr.Deng
      */
-    public String SignIn(SignInInfoDTO signInInfo) {
+    public String doSignIn(SignInInfoDTO signInInfo) {
         //前端传参缺失
         if (signInInfo == null || signInInfo.getStudentId() == null || signInInfo.getSignId() == null || signInInfo.getLatitude() == null || signInInfo.getLongitude() == null) {
             throw new CustomizeException(CustomizeErrorCode.INFO_LOST);
@@ -154,7 +154,6 @@ public class SignInService {
             }
         }
 
-
         //这个人之前没签到过
         SignData signData = new SignData();
         signData.setSignId(Integer.valueOf(signInInfo.getSignId()));        //设置签到的ID
@@ -171,9 +170,10 @@ public class SignInService {
             if (signIn.getClasses() != null) {
                 String[] classesList = signIn.getClasses().split(",");  //获得签到班级号
                 String classId = signInInfo.getStudentId().substring(0, 10);    //获得学生班级号
-                for (int a = 0; a < classesList.length; a++) {
-                    if (classId.equals(classesList[a])) {               //判断学生班级号是否在签到班级号内
+                for (String s : classesList) {
+                    if (classId.equals(s)) {               //判断学生班级号是否在签到班级号内
                         pd = false;
+                        break;
                     }
                 }
             }
@@ -282,7 +282,6 @@ public class SignInService {
         return 6371000 * acos(c) * pi / 180;
     }
 
-
     /**
      * @Description: 获得单个签到的所有记录, 应该返回签到信息, 一个存储着已签到的人的列表, 一个没签到的列表
      * @Param: [id]
@@ -314,7 +313,6 @@ public class SignInService {
         {
             stuInfoList.addAll(getStuInfoByClassNum(classNum[a]));
         }
-
 
         //获得所有没有签到记录的学生
         List<StuInfo> notList = getFailList(stuInfoList, successList, lateList);
@@ -350,7 +348,6 @@ public class SignInService {
         //
         ArrayList<StuSignInfo> signInfoArrayList = new ArrayList<>();
         for (int a = 0; a < signDataList.size(); a++) {
-
             signInfoArrayList.add(new StuSignInfo(stuMap.get(signDataList.get(a).getStuNum()), signDataList.get(a).getStuNum(), status));
         }
         return signInfoArrayList;

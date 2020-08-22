@@ -39,7 +39,7 @@ public class SignInController {
      */
     @PostMapping("/signIn")
     public ResultDTO initiateSignIn(@RequestBody SignInInfoDTO signInInfo) {
-        return ResultDTO.okOf(signInService.SignIn(signInInfo));    //返回签到是否成功
+        return ResultDTO.okOf(signInService.doSignIn(signInInfo));    //返回签到是否成功
     }
 
     /**
