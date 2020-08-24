@@ -49,10 +49,29 @@ public class SignInService {
      */
     public ResultDTO createSignIn(InitiateSignInDTO signInInfo) {
         //前端传参缺失
-        if (signInInfo == null || StringUtils.isEmpty(signInInfo.getLongitude())
-                || StringUtils.isEmpty(signInInfo.getCreator()) || !StringUtils.isNumeric(signInInfo.getLongitude())
-                || !StringUtils.isNumeric(signInInfo.getLatitude()) || signInInfo.getInterval() == null || CollectionUtils.isEmpty(signInInfo.getClasses())) {
+        if (signInInfo == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST); //学年,创建者ID,经纬度,签到时间限制,签到班级都不可以为空
+        }
+        else if(StringUtils.isBlank(signInInfo.getCreator()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.STU_ID_WRONG);
+        }
+        else if(StringUtils.isBlank(signInInfo.getLongitude()) || !StringUtils.isNumeric(signInInfo.getLongitude())
+                || !StringUtils.isNumeric(signInInfo.getLatitude()) || StringUtils.isBlank(signInInfo.getLatitude()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.LOCATION_WRONG);
+        }
+        else if(signInInfo.getInterval() == null ||signInInfo.getInterval()<0)
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.INTERVAL_WRONG);
+        }
+        else if(CollectionUtils.isEmpty(signInInfo.getClasses()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.CLASSES_WRONG);
+        }
+        else if(StringUtils.isBlank(signInInfo.getSemester()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.SEMESTER_WRONG);
         }
         SignIn signIn = new SignIn();     //新建一个签到类,用于放在数据库中
         signIn.setCreateTime(System.currentTimeMillis());       //设置创建时间
@@ -89,11 +108,24 @@ public class SignInService {
      */
     public ResultDTO doSignIn(SignInInfoDTO signInInfo) {
         //前端传参缺失
-        if (signInInfo == null || StringUtils.isEmpty(signInInfo.getStudentId()) ||
-                StringUtils.isEmpty(signInInfo.getSignId()) || StringUtils.isEmpty(signInInfo.getLatitude()) || StringUtils.isEmpty(signInInfo.getLongitude())
-                || !StringUtils.isNumeric(signInInfo.getLongitude()) || !StringUtils.isNumeric(signInInfo.getLatitude())) {
+        if (signInInfo == null)
+        {
             return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
-        } else if (Integer.parseInt(signInInfo.getSignId()) <= 0)   //签到验证码也就是签到ID小于或等于0
+        }
+        else if(StringUtils.isBlank(signInInfo.getStudentId()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.STU_ID_WRONG);
+        }
+        else if(StringUtils.isBlank(signInInfo.getSignId()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.SIGN_ID_WRONG);
+        }
+        else if(StringUtils.isBlank(signInInfo.getLatitude()) || StringUtils.isBlank(signInInfo.getLongitude())
+                || !StringUtils.isNumeric(signInInfo.getLongitude()) || !StringUtils.isNumeric(signInInfo.getLatitude()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.LOCATION_WRONG);
+        }
+        else if (Integer.parseInt(signInInfo.getSignId()) <= 0)   //签到验证码也就是签到ID小于或等于0
         {
             return ResultDTO.errorOf(CustomizeErrorCode.SIGN_ID_WRONG);
         }
@@ -235,7 +267,7 @@ public class SignInService {
     public ResultDTO signInHistory(String id) {
         //前端传参缺失
         if (id == null || StringUtils.isEmpty(id)) {
-            return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
+            return ResultDTO.errorOf(CustomizeErrorCode.STU_ID_WRONG);
         }
 
         SignInExample signInExample = new SignInExample();
@@ -300,7 +332,7 @@ public class SignInService {
     public ResultDTO getSignIn(String id) {
         //前端传参缺失
         if (id == null || Objects.equals(id, "")) {
-            return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
+            return ResultDTO.errorOf(CustomizeErrorCode.SIGN_ID_WRONG);
         }
 
         SignIn signIn = updateSignInTime(id);
@@ -414,8 +446,20 @@ public class SignInService {
      */
     public ResultDTO changeStatus(SignInChangeDTO signInChangeDTO) {
         //前端传参缺失
-        if (signInChangeDTO == null || StringUtils.isEmpty(signInChangeDTO.getSignId()) || StringUtils.isEmpty(signInChangeDTO.getStatus()) || StringUtils.isEmpty(signInChangeDTO.getStuId())) {
+        if (signInChangeDTO == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.INFO_LOST);
+        }
+        else if(StringUtils.isEmpty(signInChangeDTO.getSignId()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.SIGN_ID_WRONG);
+        }
+        else if(StringUtils.isEmpty(signInChangeDTO.getStuId()))
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.STU_ID_WRONG);
+        }
+        else if(StringUtils.isEmpty(signInChangeDTO.getStatus()) )
+        {
+            return ResultDTO.errorOf(CustomizeErrorCode.STATUS_WRONG);
         }
         SignIn sign = signInMapper.selectByPrimaryKey(Integer.valueOf(signInChangeDTO.getSignId()));        //获得签到本体
         SignDataExample signInExample = new SignDataExample();
