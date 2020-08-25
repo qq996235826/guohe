@@ -56,8 +56,8 @@ public class SignInService {
         {
             return ResultDTO.errorOf(CustomizeErrorCode.STU_ID_WRONG);
         }
-        else if(StringUtils.isBlank(signInInfo.getLongitude()) || !StringUtils.isNumeric(signInInfo.getLongitude())
-                || !StringUtils.isNumeric(signInInfo.getLatitude()) || StringUtils.isBlank(signInInfo.getLatitude()))
+        else if(StringUtils.isBlank(signInInfo.getLongitude()) || !isNumeric(signInInfo.getLongitude())
+                || !isNumeric(signInInfo.getLatitude()) || StringUtils.isBlank(signInInfo.getLatitude()))
         {
             return ResultDTO.errorOf(CustomizeErrorCode.LOCATION_WRONG);
         }
@@ -517,5 +517,19 @@ public class SignInService {
             }
         }
         return ResultDTO.okOf("更改状态成功");
+    }
+
+    private boolean isNumeric(String str){
+        Boolean flag = false;
+        String tmp;
+        if(StringUtils.isNotBlank(str)){
+            if(str.startsWith("-")){
+                tmp = str.substring(1);
+            }else{
+                tmp = str;
+            }
+            flag = tmp.matches("^[0.0-9.0]+$");
+        }
+        return flag;
     }
 }
