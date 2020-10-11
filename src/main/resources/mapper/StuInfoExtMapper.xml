@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guohe.app.mapper.StuInfoExtMapper">
+    <resultMap id="BaseResultMap" type="com.guohe.app.model.StuInfo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="major" jdbcType="VARCHAR" property="major" />
+        <result column="academy" jdbcType="VARCHAR" property="academy" />
+        <result column="class_num" jdbcType="VARCHAR" property="class_num" />
+        <result column="identity_card_number" jdbcType="VARCHAR" property="identity_card_number" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    </resultMap>
+    <select id="countByDay" parameterType="com.guohe.app.model.StuInfoExample" resultType="java.lang.Long">
+        select count(*) from student_info WHERE DATEDIFF(NOW(),create_time)=#{day,jdbcType=INTEGER}
+    </select>
+</mapper>

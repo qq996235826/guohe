@@ -11,7 +11,7 @@ public interface StuInfoMapper {
 
     int deleteByExample(StuInfoExample example);
 
-    int deleteByPrimaryKey(String uid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(StuInfo record);
 
@@ -21,7 +21,7 @@ public interface StuInfoMapper {
 
     List<StuInfo> selectByExample(StuInfoExample example);
 
-    StuInfo selectByPrimaryKey(String uid);
+    StuInfo selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") StuInfo record, @Param("example") StuInfoExample example);
 

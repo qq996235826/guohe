@@ -3,6 +3,8 @@ package com.guohe.app.model;
 import java.util.Date;
 
 public class StuInfo {
+    private Integer id;
+
     private String uid;
 
     private String password;
@@ -21,7 +23,15 @@ public class StuInfo {
 
     private String sex;
 
-    private Date updated_time;
+    private Date create_time;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUid() {
         return uid;
@@ -95,11 +105,11 @@ public class StuInfo {
         this.sex = sex == null ? null : sex.trim();
     }
 
-    public Date getUpdated_time() {
-        return updated_time;
+    public Date getCreate_time() {
+        return create_time;
     }
 
-    public void setUpdated_time(Date updated_time) {
-        this.updated_time = updated_time;
+    public void setCreate_time(Date create_time) {
+        this.create_time = create_time;
     }
 }

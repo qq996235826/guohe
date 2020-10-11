@@ -154,5 +154,7 @@ public class RankService {
         } else {
             throw new CustomizeException(CustomizeErrorCode.JSON_WRONG);
         }
+
+
     }
 }

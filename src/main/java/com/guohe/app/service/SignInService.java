@@ -38,7 +38,8 @@ public class SignInService {
     @Resource
     StuInfoMapper stuInfoMapper;
 
-    double precision = 200; //签到范围,目前单位是米
+    //签到范围,目前单位是米
+    double precision = 200;
     double pi = 3.1415926535897;
 
     /**

@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>v-charts</title>
     <meta charset="UTF-8">
-    <title>你好</title>
+    <!--安装VUE-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    ????
+    <!--定义了一个标签,id是app-->
+    <div id="app">
+        <!--存放的数据是message-->
+        {{message}}{{a}}
+    </div>
+    <!--定义了一个脚本,功能是管理这个标签里的数据-->
+    <script type="text/javascript">
+        //创建一个data,控制message和a变量
+        var data={message:1,
+            a: 2};
+        //创建一个Vue对象,命名为App
+        var app = new Vue({
+            //Vue对象里,el是选择标签的,利用"#+标签id"来选择标签
+            el: '#app',
+            //Vue对象的data成员就是上面定义的data
+            data: data
+        });
+        data.message="hello,world";
+    </script>
 </body>
 </html>

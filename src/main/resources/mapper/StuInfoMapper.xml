@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.guohe.app.mapper.StuInfoMapper">
   <resultMap id="BaseResultMap" type="com.guohe.app.model.StuInfo">
-    <id column="uid" jdbcType="VARCHAR" property="uid" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="VARCHAR" property="uid" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="birthday" jdbcType="VARCHAR" property="birthday" />
@@ -11,7 +12,7 @@
     <result column="class_num" jdbcType="VARCHAR" property="class_num" />
     <result column="identity_card_number" jdbcType="VARCHAR" property="identity_card_number" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
-    <result column="updated_time" jdbcType="TIMESTAMP" property="updated_time" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uid, password, name, birthday, major, academy, class_num, identity_card_number, sex, 
-    updated_time
+    id, uid, password, name, birthday, major, academy, class_num, identity_card_number, 
+    sex, create_time
   </sql>
   <select id="selectByExample" parameterType="com.guohe.app.model.StuInfoExample" resultMap="BaseResultMap">
     select
@@ -89,15 +90,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from student_info
-    where uid = #{uid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from student_info
-    where uid = #{uid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.guohe.app.model.StuInfoExample">
     delete from student_info
@@ -106,18 +107,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.guohe.app.model.StuInfo">
-    insert into student_info (uid, password, name, 
-      birthday, major, academy, 
-      class_num, identity_card_number, sex, 
-      updated_time)
-    values (#{uid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{birthday,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{academy,jdbcType=VARCHAR}, 
-      #{class_num,jdbcType=VARCHAR}, #{identity_card_number,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
-      #{updated_time,jdbcType=TIMESTAMP})
+    insert into student_info (id, uid, password, 
+      name, birthday, major, 
+      academy, class_num, identity_card_number, 
+      sex, create_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, 
+      #{academy,jdbcType=VARCHAR}, #{class_num,jdbcType=VARCHAR}, #{identity_card_number,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{create_time,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.guohe.app.model.StuInfo">
     insert into student_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="uid != null">
         uid,
       </if>
@@ -145,11 +149,14 @@
       <if test="sex != null">
         sex,
       </if>
-      <if test="updated_time != null">
-        updated_time,
+      <if test="create_time != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="uid != null">
         #{uid,jdbcType=VARCHAR},
       </if>
@@ -177,8 +184,8 @@
       <if test="sex != null">
         #{sex,jdbcType=VARCHAR},
       </if>
-      <if test="updated_time != null">
-        #{updated_time,jdbcType=TIMESTAMP},
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -191,6 +198,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update student_info
     <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.uid != null">
         uid = #{record.uid,jdbcType=VARCHAR},
       </if>
@@ -218,8 +228,8 @@
       <if test="record.sex != null">
         sex = #{record.sex,jdbcType=VARCHAR},
       </if>
-      <if test="record.updated_time != null">
-        updated_time = #{record.updated_time,jdbcType=TIMESTAMP},
+      <if test="record.create_time != null">
+        create_time = #{record.create_time,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -228,7 +238,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update student_info
-    set uid = #{record.uid,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
+      uid = #{record.uid,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       birthday = #{record.birthday,jdbcType=VARCHAR},
@@ -237,7 +248,7 @@
       class_num = #{record.class_num,jdbcType=VARCHAR},
       identity_card_number = #{record.identity_card_number,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=VARCHAR},
-      updated_time = #{record.updated_time,jdbcType=TIMESTAMP}
+      create_time = #{record.create_time,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -245,6 +256,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.guohe.app.model.StuInfo">
     update student_info
     <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
@@ -269,15 +283,16 @@
       <if test="sex != null">
         sex = #{sex,jdbcType=VARCHAR},
       </if>
-      <if test="updated_time != null">
-        updated_time = #{updated_time,jdbcType=TIMESTAMP},
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where uid = #{uid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.guohe.app.model.StuInfo">
     update student_info
-    set password = #{password,jdbcType=VARCHAR},
+    set uid = #{uid,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=VARCHAR},
       major = #{major,jdbcType=VARCHAR},
@@ -285,8 +300,8 @@
       class_num = #{class_num,jdbcType=VARCHAR},
       identity_card_number = #{identity_card_number,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=VARCHAR},
-      updated_time = #{updated_time,jdbcType=TIMESTAMP}
-    where uid = #{uid,jdbcType=VARCHAR}
+      create_time = #{create_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="com.guohe.app.model.StuInfoExample" resultMap="BaseResultMap">
     select

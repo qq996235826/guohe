@@ -14,9 +14,9 @@
         </commentGenerator>
         <!--数据库相关设定,驱动,链接,用户名与密码-->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/guohe?serverTimezone=UTC"
-                        userId="root"
-                        password="admin">
+                        connectionURL="jdbc:mysql://rm-uf62014ejdh8979494o.mysql.rds.aliyuncs.com/guohe_1?characterEncoding=utf8"
+                        userId="guohe_read_only"
+                        password="ABC123456*">
         </jdbcConnection>
 
         <javaTypeResolver >
