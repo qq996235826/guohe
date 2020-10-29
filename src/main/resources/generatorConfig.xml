@@ -51,6 +51,9 @@
         <table tableName="student_info" domainObjectName="StuInfo" ><!--第1个填表名,第2个填他根据表自动生成的类你想让这个类叫什么名字-->
             <property name="useActualColumnNames" value="true"/><!--true的时候,会把列名作为属性名,false的时候会转化为驼峰来命名-->
         </table>
+        <table tableName="marquee_message" domainObjectName="MarqueeMessage" ><!--第1个填表名,第2个填他根据表自动生成的类你想让这个类叫什么名字-->
+            <property name="useActualColumnNames" value="true"/><!--true的时候,会把列名作为属性名,false的时候会转化为驼峰来命名-->
+        </table>
         <!--控制台运行  mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate-->
     </context>
 </generatorConfiguration>

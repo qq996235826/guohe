@@ -20,6 +20,8 @@ import java.util.HashMap;
  * @description/描述: 负责查询排名的controller
  * @data/创建日期: 2020-05-16 21:08
  **/
+
+@CrossOrigin//跨域注解
 @RestController
 @RequestMapping("/api/v1")
 public class ScoreController {

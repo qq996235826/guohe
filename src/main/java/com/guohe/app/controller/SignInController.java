@@ -16,6 +16,7 @@ import javax.annotation.Resource;
  * @author: Mr.Deng
  * @create: 2020-08-09 18:52
  **/
+@CrossOrigin//跨域注解
 @RestController
 @RequestMapping("/api/v1")
 public class SignInController {
