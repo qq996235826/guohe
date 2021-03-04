@@ -10,9 +10,9 @@ import lombok.Data;
  */
 @Data
 public class ResultDTO {
-    private Integer status;   //状态代码
-    private String message; //操作结果的详细信息
-    private Object data;         //返回给前端的数据,是个泛型
+    private Integer code;   //状态代码
+    private String msg; //操作结果的详细信息
+    private Object info;         //返回给前端的数据,是个泛型
 
     /**
      * 描述:本方法类似构造方法,把错误代码和信息传入,返回一个本对象
@@ -23,8 +23,8 @@ public class ResultDTO {
      */
     public static ResultDTO errorOf(Integer code, String message) {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setStatus(code);
-        resultDTO.setMessage(message);
+        resultDTO.setCode(code);
+        resultDTO.setMsg(message);
         return resultDTO;
     }
 
@@ -53,8 +53,8 @@ public class ResultDTO {
      **/
     public static ResultDTO okOf() {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setStatus(200);
-        resultDTO.setMessage("请求成功");
+        resultDTO.setCode(200);
+        resultDTO.setMsg("请求成功");
         return resultDTO;
     }
 
@@ -65,9 +65,9 @@ public class ResultDTO {
      **/
     public static ResultDTO okOf(Object t) {
         ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setStatus(200);
-        resultDTO.setMessage("请求成功");
-        resultDTO.setData(t);
+        resultDTO.setCode(200);
+        resultDTO.setMsg("请求成功");
+        resultDTO.setInfo(t);
         return resultDTO;
     }
 
